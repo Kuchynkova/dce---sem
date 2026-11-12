@@ -7,23 +7,31 @@ services:
       POSTGRES_DB: test_db
     ports:
       - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U root"]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: always
+    networks:
+      - back-tier
 
   setup:
-    build:
-      context: .
-      dockerfile: Dockerfile.setup
-    command: >
-      sh -c "psql -h postgresqldb -U root -d test_db -f /opt/setup/create_schema.sql && 
-             psql -h postgresqldb -U root -d test_db -f /opt/setup/populate_schema.sql"
-    depends_on:
-      postgresqldb:
-        condition: service_healthy
+      build:
+        context: .
+        dockerfile: Dockerfile.setup
+      command: >
+        sh -c "psql -h postgresqldb -U root -d test_db -c 'SELECT 1 FROM flashcards;' >/dev/null 2>&1 || 
+              (psql -h postgresqldb -U root -d test_db -f /opt/setup/create_schema.sql && 
+                psql -h postgresqldb -U root -d test_db -f /opt/setup/populate_schema.sql)"
+      depends_on:
+        postgresqldb:
+          condition: service_healthy
+      networks:
+        - back-tier
+
   backend:
     build:
       context: .
@@ -33,6 +41,10 @@ services:
     depends_on:
       setup:
         condition: service_completed_successfully
+    networks:
+      - front-tier
+      - back-tier
+
   frontend:
     build:
       context: .
@@ -41,18 +53,28 @@ services:
       - "8080:80"
     depends_on:
       - backend
+    networks:
+      - front-tier
+
   devel:
     build:
       context: .
       dockerfile: Dockerfile.devel
     volumes:
-      # aby to šlo upravovat živě
       - .:/workspaces/${COMPOSE_PROJECT_NAME:-semestralka-flashcards}
     ports:
       - "8088:5000"
-    # Udrží kontejner běžící, dokud se do něj nepřipojí VS Code
     command: sleep infinity
     depends_on:
       postgresqldb:
         condition: service_healthy
-  
+    networks:
+      - back-tier
+
+# Zde definujeme samotné sítě
+networks:
+  front-tier:
+  back-tier:
+
+volumes:
+  db_data:

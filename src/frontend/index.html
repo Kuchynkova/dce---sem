@@ -6,14 +6,29 @@
     <style>
         body { font-family: sans-serif; text-align: center; background-color: #f4f4f9; padding-top: 50px; }
         .card { background: white; border-radius: 10px; padding: 30px; width: 350px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
+        
+        /* Vylepšená třída pro skrývání elementů */
+        .hidden { display: none !important; }
+        
         .answer { color: #2ecc71; font-weight: bold; margin-top: 20px; }
-        button { margin: 10px 5px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background-color: #3498db; color: white; }
+        button { margin: 10px 5px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background-color: #3498db; color: white; transition: background 0.3s; }
         button:hover { background-color: #2980b9; }
+        
+        /* Nové tlačítko pro formulář */
+        #btn-show-add { background-color: #9b59b6; margin-top: 30px; font-weight: bold; }
+        #btn-show-add:hover { background-color: #8e44ad; }
+
+        /* Formulář */
+        .add-form { margin-top: 20px; padding: 20px; background: white; border-radius: 10px; width: 350px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .add-form input { width: 90%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .add-form button { background-color: #2ecc71; width: 90%; margin-top: 15px; font-weight: bold; }
+        .add-form button:hover { background-color: #27ae60; }
     </style>
 </head>
 <body>
     <h1>Uč se programovat!</h1>
+    
+    <!-- Zobrazování kartiček -->
     <div class="card" id="flashcard">
         <h4 id="category" style="color: #888; margin-top: 0;">Kategorie</h4>
         <h2 id="question">Načítám otázku...</h2>
@@ -21,6 +36,21 @@
         <button id="btn-toggle">Ukaž odpověď</button>
         <button id="btn-next">Další otázka</button>
     </div>
+
+    <!-- Tlačítko, které odkrývá formulář -->
+    <button id="btn-show-add">Přidat vlastní kartičku</button>
+
+    <!-- Formulář (nyní má třídu hidden) -->
+    <div class="add-form hidden" id="form-container">
+        <h3>Nová kartička</h3>
+        <form id="add-form">
+            <input type="text" id="new-question" placeholder="Zadej otázku..." required>
+            <input type="text" id="new-answer" placeholder="Zadej odpověď..." required>
+            <input type="text" id="new-category" placeholder="Kategorie (např. Python)">
+            <button type="submit">Uložit do databáze</button>
+        </form>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
