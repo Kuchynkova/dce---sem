@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Programátorské kartičky</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background-color: #f4f4f9; padding-top: 50px; }
+        .card { background: white; border-radius: 10px; padding: 30px; width: 350px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        .answer { color: #2ecc71; font-weight: bold; margin-top: 20px; }
+        button { margin: 10px 5px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background-color: #3498db; color: white; }
+        button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1>Uč se programovat!</h1>
+    <div class="card" id="flashcard">
+        <h4 id="category" style="color: #888; margin-top: 0;">Kategorie</h4>
+        <h2 id="question">Načítám otázku...</h2>
+        <p id="answer" class="answer hidden"></p>
+        <button id="btn-toggle">Ukaž odpověď</button>
+        <button id="btn-next">Další otázka</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

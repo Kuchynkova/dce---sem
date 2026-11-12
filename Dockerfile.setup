@@ -1,0 +1,9 @@
+FROM postgres:15-alpine
+
+WORKDIR /opt/setup
+
+COPY src/setup/ .
+
+RUN chmod 0600 .pgpass
+
+ENV PGPASSFILE=/opt/setup/.pgpass
