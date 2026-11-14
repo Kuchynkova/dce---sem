@@ -1,6 +1,6 @@
 let cards = [];
 let currentIndex = 0;
-const API_URL = 'http://localhost:5000/api/flashcards';
+const API_URL = 'http://localhost:5005/api/flashcards';
 
 // loadCards nyní umí po uložení přeskočit na nově vytvořenou kartičku
 async function loadCards(jumpToLast = false) {
